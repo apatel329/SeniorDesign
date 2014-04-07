@@ -1,0 +1,234 @@
+ struct piece 
+{
+	bool color; // 0 = white 1 = black
+	int x;
+	int y;//location
+	bool status; // 1 = alive 0 = dead
+	char type;
+	/* pawn =  'p', 'r'= rook 'n'=knight, 'b'=bishop, 'q' = queen, 'k' = king */
+	int num;
+	/*1 =  black pawn 1 */
+};
+ struct piece tempPiece;
+  int tempX1, tempX2;
+  int tempY1, tempY2;
+  bool turn = 0;// 0 is white 1 is black
+  int ii=0, index,jj;
+  struct piece pieces[32];
+// all the grids are [row][col] = [y][x]
+  int inputarray3d[8] [8];
+  int grid [8] [8];
+  int mini [4][4];
+int outputGrid[8][8];
+int ill[8][8];
+// 0 = white 1 = black 2 = open
+void resetgrid()
+{
+	for(ii = 0; ii<4;ii++)
+	{
+		mini[0][ii] = 0;
+		mini[1][ii] = 1;
+		mini[2][ii] = 1;
+		mini[3][ii] = 2;
+	}
+
+	for(ii = 0; ii<8;ii++)
+	{
+		grid[0][ii] = 0;
+		grid[1][ii] = 0;
+		grid[6][ii] = 1;
+		grid[7][ii] = 1;
+		grid[2][ii] = 2;
+		grid[3][ii] = 2;
+		grid[4][ii] = 2;
+		grid[5][ii] = 2;
+	}
+
+	for(ii =0; ii<32;ii++)
+	{
+		//white pieces
+		if(ii<16)
+		{
+			pieces[ii].color = 0;
+			if(ii<8)
+			{//set x and y for first row
+				pieces[ii].x =ii;
+				pieces[ii].y= 0;
+			}
+			else
+			{//second row
+				pieces[ii].x =ii-8;
+				pieces[ii].y=1;
+			}
+			pieces[ii].status=1;
+
+
+		}
+		else //black pieces
+		{pieces[ii].color = 1;
+		if(ii<24)
+		{//
+			pieces[ii].x =ii-16;
+			pieces[ii].y=6;
+		}
+		else
+		{
+			pieces[ii].x =ii-24;
+			pieces[ii].y=7;
+		}
+		pieces[ii].status=1;
+		}
+	}
+	pieces[0].type = 'r';pieces[0].num = 1 ;
+		pieces[1].type = 'n';pieces[1].num= 1 ;
+		pieces[2].type = 'b';pieces[2].num= 1 ;
+		pieces[3].type = 'k';pieces[3].num= 1 ;
+		pieces[4].type = 'q';pieces[4].num= 1 ;
+		pieces[5].type = 'b';pieces[5].num= 2 ;
+		pieces[6].type = 'n';pieces[6].num= 2 ;
+		pieces[7].type = 'r';pieces[7].num= 2 ;
+		pieces[8].type = 'p';pieces[8].num= 1 ;
+		pieces[9].type = 'p';pieces[9].num= 2 ;
+		pieces[10].type = 'p';pieces[10].num= 3 ;
+		pieces[11].type = 'p';pieces[11].num= 4 ;
+		pieces[12].type = 'p';pieces[12].num= 5 ;
+		pieces[13].type = 'p';pieces[13].num= 6 ;
+		pieces[14].type = 'p';pieces[14].num= 7 ;
+		pieces[15].type = 'p';pieces[15].num= 8 ;
+		//black pieces
+		pieces[16].type ='p';pieces[16].num= 1 ;
+		pieces[17].type ='p';pieces[17].num= 2 ;
+		pieces[18].type ='p';pieces[18].num= 3 ;
+		pieces[19].type ='p';pieces[19].num= 4 ;
+		pieces[20].type ='p';pieces[20].num= 5 ;
+		pieces[21].type ='p';pieces[21].num= 6 ;
+		pieces[22].type ='p';pieces[22].num= 7 ;
+		pieces[23].type ='p';pieces[23].num= 8 ;
+		pieces[24].type ='r';pieces[24].num= 1 ;
+		pieces[25].type ='n';pieces[25].num= 1 ;
+		pieces[26].type ='b';pieces[26].num= 1 ;
+		pieces[27].type ='k';pieces[27].num= 1 ;
+		pieces[28].type ='q';pieces[28].num= 1 ;
+		pieces[29].type ='b';pieces[29].num= 2 ;
+		pieces[30].type ='n';pieces[30].num= 2 ;
+		pieces[31].type ='r';pieces[31].num= 2 ;
+}
+
+bool isButtonPiece()// case when only a new piece is pressed
+{
+	index = findPiece();
+	if (pieces[index].color != turn)
+	{// make sure its the right color
+		outputError();
+		return 0;
+	}
+	if (grid[pieces[index].y][pieces[index].x]==2)
+	{// make sure its not a blank space
+		outputError();
+		return 0;
+	}
+	return 1;
+}
+bool isButtonBlank()// case where a valid blank place is pressed to move a piece
+{
+
+	if((grid[tempX1][tempY1]==2))
+	{
+		// check to make sure its a place pressed is on of the allowed places
+		//if(ill[tempX1][tempY1]==1)
+		return 1;
+	}
+	else return 0;
+}
+bool isButtonDown3() // case where a valid blank place is pressed to move a piece
+{
+	if((grid[tempX1][tempY1]==2))
+	{
+
+		return 1;
+	}
+	else return 0;
+}
+void updateXY()
+{
+	tempX2 = tempX1;
+	tempY2 = tempY1;
+	for(ii = 0; ii<8;ii++)
+	{
+		for(jj = 0; jj<8;jj++)
+		{
+			if(inputarray3d[ii][jj]==1)
+			{
+				tempX1 = jj;
+				tempY1 = ii;
+			}
+		}
+	}
+
+	// then update temp_1 values
+}
+int findPiece()
+{
+	for(ii = 0; ii<32;ii++)
+	{
+		if((pieces[ii].x == tempX1)&&(pieces[ii].y == tempY1))
+		{
+			return ii;
+		}
+
+	}
+	return 0;
+}
+void outputError()
+{
+	for(ii = 0; ii<8;ii++)
+	{for(jj = 0; jj<8;jj++)
+	{
+		outputGrid[ii][jj] = 0;
+	}
+	tempX1 = tempX2;
+	tempY1 = tempY2;
+	}
+}
+void run()
+{
+	resetgrid();
+		while (1)
+		{
+			updateXY();// update coordinates
+
+
+				while(isButtonPiece())
+				{// case where a piece is pressed and its the right color
+
+						// check which type is it then output leds
+					if ((pieces[index].type) == 'r')
+					{
+						castlealg(tempX1,tempY1,turn,grid);
+					} else if (pieces[index].type == 'n')
+					{
+						knightalg(tempX1,tempY1,turn,grid);
+					} else if (pieces[index].type == 'b')
+					{
+						bishopalg(tempX1,tempY1,turn,grid);
+					} else if (pieces[index].type == 'k')
+					{
+						kingalg(tempX1,tempY1,turn,grid);
+					} else if (pieces[index].type == 'q')
+					{
+						queenalg(tempX1,tempY1,turn,grid);
+					} else if (pieces[index].type == 'p')
+					{
+						pawnalg(tempX1,tempY1,turn,grid);
+					}
+				}
+				while (isButtonBlank()) // case blank place is pressed to move a piece
+				{
+					// update piece location
+					// look for check and mate
+
+					turn = !turn;
+				}
+			}
+
+	}
