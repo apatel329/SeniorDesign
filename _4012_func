@@ -1,0 +1,14 @@
+bool isButtonPiece(); // when its a different button
+bool isButtonBlank();
+bool isButtonDown3();
+void resetgrid();
+int findPiece();
+void updateXY();
+void outputError();
+void bishopalg(int xpos, int ypos, int turn, int grid[8][8]);
+void castlealg(int xpos, int ypos, int turn, int grid[8][8]);
+void knightalg(int xpos, int ypos, int turn, int grid[8][8]);
+void kingalg(int xpos, int ypos, int turn, int grid[8][8]);
+void queenalg(int xpos, int ypos, int turn, int grid[8][8]);
+void pawnalg(int xpos, int ypos, int turn, int grid[8][8]);
+void run();
